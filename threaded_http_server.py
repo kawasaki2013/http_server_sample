@@ -1,27 +1,27 @@
 import time
 import socket
 import threading
-import SocketServer
+import socketserver
 
-class MyHTTPRequestHandler(SocketServer.StreamRequestHandler):
+class MyHTTPRequestHandler(socketserver.StreamRequestHandler):
 
     def handle(self):
         data = self.rfile.readline().strip()
-        print data
+        print(data)
         
         cur_thread = threading.currentThread()
-        print "Current thread:", cur_thread.getName()
+        print("Current thread:", cur_thread.getName())
 
         f = open("index.html", 'r')
 
-        self.wfile.write("HTTP/1.1 200 OK\r\n")
-        self.wfile.write("Content-Type: text/html; charset=utf-8\r\n")
-        self.wfile.write("\r\n")
-        self.wfile.write(f.read())
+        self.wfile.write("HTTP/1.1 200 OK\r\n".encode('ascii'))
+        self.wfile.write("Content-Type: text/html; charset=utf-8\r\n".encode('ascii'))
+        self.wfile.write("\r\n".encode('ascii'))
+        self.wfile.write(f.read().encode('ascii'))
 
         f.close()
 
-class ThreadedHTTPServer(SocketServer.ThreadingMixIn, SocketServer.TCPServer):
+class ThreadedHTTPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
     pass
 
 if __name__ == "__main__":
@@ -34,8 +34,8 @@ if __name__ == "__main__":
     server_thread.setDaemon(True)
     server_thread.start()
 
-    print "Server loop running in thread:", server_thread.getName()
-    print "IP: %s" % ip
-    print "Port: %s" % port
+    print("Server loop running in thread:", server_thread.getName())
+    print("IP: %s" % ip)
+    print("Port: %s" % port)
 
     time.sleep(60)
